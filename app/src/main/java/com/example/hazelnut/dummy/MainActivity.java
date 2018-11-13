@@ -300,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
             postdata.put("address",address);
             postdata.put("nationality",nationality);
             postdata.put("accountnum",accountnum);
+            postdata.put("photo",photo);
             postdata.put("bcabank",bcabank);
             postdata.put("bcainsurance",bcainsurance);
             postdata.put("bcafinancial",bcafinancial);
