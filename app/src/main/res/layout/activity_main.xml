@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert data to Blockchain : " />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/nameFirst"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="first name" />
+        <EditText
+            android:id="@+id/nameLast"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="last name" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/address"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="address" />
+
+        <EditText
+            android:id="@+id/dob"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="dob" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/ktp"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="no ktp" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="email" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/accountNumber"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="acc number" />
+
+        <EditText
+            android:id="@+id/nationality"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="nationality" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/photo"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="photo" />
+
+        <Button
+            android:id="@+id/btn_takepicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take" />
+
+        <Button
+            android:id="@+id/btn_importpicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Import" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/radioUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioBank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="BCA Bank" />
+
+            <RadioButton
+                android:id="@+id/radioInsurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BCA Insurance" />
+
+            <RadioButton
+                android:id="@+id/radioFinance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BCA Finance" />
+
+            <RadioButton
+                android:id="@+id/radioSyariah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BCA Syariah" />
+
+            <RadioButton
+                android:id="@+id/radioSekuritas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BCA Sekuritas" />
+
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/texture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="150dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds ="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/ipInput"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:hint="Server IP Address" />
+
+        <Button
+            android:id="@+id/btn_kirim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send" />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="status" />
+
+    </LinearLayout>
+</LinearLayout>
