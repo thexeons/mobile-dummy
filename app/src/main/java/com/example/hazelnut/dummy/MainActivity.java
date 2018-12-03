@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +35,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client;
 
     //variable declaraton
-    Button sendButton, takeButton, importButton;
+    Button sendButton, takeButton, importButton, logout;
 
     ImageView imageView;
 
@@ -89,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         imageView  = findViewById(R.id.texture);
         importButton = findViewById(R.id.btn_importpicture);
         radioUnitGroup = findViewById(R.id.radioUnit);
+        logout = findViewById(R.id.logout);
 
         //Request camera permission to avoid crash
 
@@ -97,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, 100);
         }
+
+        //database handler part
+
+        //DatabaseHandler db = new DatabaseHandler(this);
+        //ArrayList<HashMap<String, String>> userData = db.GetBlocks();
 
 
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +140,17 @@ public class MainActivity extends AppCompatActivity {
                     unit = "bcasekuritas";
                 }
                 api = ":8090/newBlock/";
+                DatabaseHandler dbHandler = new DatabaseHandler(MainActivity.this);
+                dbHandler.insertUserDetails(nameFirst.getText().toString(),
+                        nameLast.getText().toString(),
+                        ktp.getText().toString(),
+                        email.getText().toString(),
+                        dob.getText().toString(),
+                        address.getText().toString(),
+                        nationality.getText().toString(),
+                        accountNumber.getText().toString(),
+                        photo.getText().toString());
+                Toast.makeText(getApplicationContext(), "Details Inserted Successfully",Toast.LENGTH_SHORT).show();
                 sendpost(nameFirst.getText().toString(),
                         nameLast.getText().toString(),
                         ktp.getText().toString(),
@@ -179,6 +203,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     ////////////////////////
 
