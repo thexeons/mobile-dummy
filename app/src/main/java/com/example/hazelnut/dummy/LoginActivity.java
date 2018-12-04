@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     OkHttpClient client;
-    Button loginButton;
+    Button loginButton, skipButton;
     EditText username, password;
     TextView registerText, resultText;
     String api = ":8095/verifyLogin/";
@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         registerText = findViewById(R.id.registerText);
         resultText= findViewById(R.id.result);
+        skipButton = findViewById(R.id.skip);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +63,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent pindah = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(pindah);
+            }
+        });
+        skipButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(pindah);
             }
         });
@@ -83,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
-    protected void sendpost(String username, String password)
+    protected void sendpost(final String usernama, String password)
     {
         client = new OkHttpClient.Builder()
                 .connectTimeout(50,TimeUnit.SECONDS)
@@ -92,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
        JSONObject postdata = new JSONObject();
        String sendpassword = password.replaceAll("\n","");
         try {
-            postdata.put("username",username);
+            postdata.put("username",usernama);
             postdata.put("password",sendpassword);
         }
         catch (JSONException e)
@@ -124,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(result.equals("1")) //1 berhasil, 0 angka
                     {
                         Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
+                        pindah.putExtra("username",usernama);
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                             @Override
@@ -132,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                         startActivity(pindah);
+
                     }
                     else
                     {

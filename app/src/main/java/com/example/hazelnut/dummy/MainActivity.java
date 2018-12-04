@@ -5,11 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client;
 
     //variable declaraton
-    Button sendButton, takeButton, importButton, logout,refresh;
+    Button sendButton, takeButton, importButton, updateButton, logout,refresh;
 
     ImageView imageView;
 
@@ -68,10 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
     Bitmap img;
     //Rest API endpoint
-    String api = ":8095/newBlock/";
+    String api = ":8095/tempBlock/";
     String api2 = ":8095/getUserDetail/";
+    String api3 = ":8095/fetchData/";
     String statusjson;
+    String fetchjson;
     Status statusfinal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         ipInput = findViewById(R.id.ipInput);
         sendButton = findViewById(R.id.btn_kirim);
         takeButton = findViewById(R.id.btn_takepicture);
+        updateButton = findViewById(R.id.btn_update);
         bankStatus = findViewById(R.id.bankStatus);
         insuranceStatus = findViewById(R.id.insuranceStatus);
         financeStatus = findViewById(R.id.financeStatus);
@@ -116,6 +117,27 @@ public class MainActivity extends AppCompatActivity {
         //DatabaseHandler db = new DatabaseHandler(this);
         //ArrayList<HashMap<String, String>> userData = db.GetBlocks();
 
+        //fetch data
+        Intent i = getIntent();
+        String tempuser = i.getStringExtra("username");
+        sendpost(tempuser,"a",ipInput.getText().toString());
+        ObjectMapper mapper = new ObjectMapper();
+        Block fetched = new Block();
+        try {
+            fetched = mapper.readValue(fetchjson, Block.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //insert fetched data
+        nameFirst.setText(fetched.getFirstname());
+        nameLast.setText(fetched.getLastname());
+        ktp.setText(fetched.getKtp());
+        email.setText(fetched.getEmail());
+        dob.setText(fetched.getDob());
+        address.setText(fetched.getAddress());
+        nationality.setText(fetched.getNationality());
+        accountNumber.setText(fetched.getAccountnum());
+        photo.setText(fetched.getPhoto());
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
                 {
                     unit = "bcasekuritas";
                 }
-                api = ":8090/newBlock/";
                 DatabaseHandler dbHandler = new DatabaseHandler(MainActivity.this);
                 dbHandler.insertUserDetails(nameFirst.getText().toString(),
                         nameLast.getText().toString(),
@@ -231,6 +252,13 @@ public class MainActivity extends AppCompatActivity {
                 syariahStatus.setText(statusfinal.getSyariahStatus());
                 financeStatus.setText(statusfinal.getFinanceStatus());
                 sekuritasStatus.setText(statusfinal.getSekuritasStatus());
+            }
+        });
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -376,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.w("failure Response", e.getMessage());
+                Log.w("FAILED: ", e.getMessage());
             }
 
             @Override
@@ -385,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful())
                 {
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
-                    Log.w("SUCCESS", result);
+                    Log.w("SUCCESS: ", result);
                 }
             }
         });
@@ -418,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.w("failure Response", e.getMessage());
+                Log.w("FAILED: ", e.getMessage());
             }
 
             @Override
@@ -427,8 +455,51 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful())
                 {
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
-                    Log.w("SUCCESS", result);
+                    Log.w("SUCCESS: ", result);
                     statusjson = result;
+                }
+            }
+        });
+    }
+    protected void sendpost(String username, String dummy,String ipnumber)
+    {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(50,TimeUnit.SECONDS)
+                .readTimeout(50,TimeUnit.SECONDS)
+                .build();
+
+        JSONObject postdata = new JSONObject();
+        try {
+
+            postdata.put("username",username);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
+
+        final Request request = new Request.Builder()
+                .url("http://"+ "192.168.43.219" + api3)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.w("FAILED: ", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful())
+                {
+                    String result = response.body().string(); //jangan panggil response body lebih dari sekali
+                    Log.w("SUCCESS: ", result);
+                    fetchjson = result;
+
                 }
             }
         });

@@ -13,6 +13,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
     <EditText
         android:id="@+id/usernameText"
         android:layout_width="160dp"
