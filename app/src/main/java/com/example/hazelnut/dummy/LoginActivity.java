@@ -2,6 +2,8 @@ package com.example.hazelnut.dummy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -29,8 +31,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.example.hazelnut.dummy.MainActivity.MEDIA_TYPE;
-
 public class LoginActivity extends AppCompatActivity {
 
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText username, password;
     TextView registerText, resultText;
     String api = ":8095/verifyLogin/";
-    String answer ="";
 
     public static final String key = "TeddyGembelGante";
     public static final String initVector = "GembelTeddyGante";
@@ -56,16 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String encryptedpassword = AESEncrypt(password.getText().toString());
-                if(sendpost(username.getText().toString(),encryptedpassword).equals("1")) //1 berhasil, 0 angka
-                {
-                    Toast.makeText(LoginActivity.this, "Login Success!",Toast.LENGTH_LONG).show();
-                    Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(pindah);
-                }
-                else
-                {
-                    Toast.makeText(LoginActivity.this, "Login Failed!",Toast.LENGTH_LONG).show();
-                }
+                sendpost(username.getText().toString(),encryptedpassword);
             }});
 
         registerText.setOnClickListener(new View.OnClickListener(){
@@ -93,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
-    protected String sendpost(String username, String password)
+    protected void sendpost(String username, String password)
     {
         client = new OkHttpClient.Builder()
                 .connectTimeout(50,TimeUnit.SECONDS)
@@ -131,20 +121,30 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
                     Log.w("SUCCESS", result);
-
-                    if (result.equals("1"))
+                    if(result.equals("1")) //1 berhasil, 0 angka
                     {
-                        answer = "1";
-                    }
-                    else if (result.equals("0"))
-                    {
-                        answer = "0";
-                    }
+                        Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
 
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, "Login Success!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        startActivity(pindah);
+                    }
+                    else
+                    {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(LoginActivity.this, "Login Failed!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
             }
         });
-        return answer;
     }
-
 }

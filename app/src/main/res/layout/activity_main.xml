@@ -159,6 +159,42 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds ="true"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bankStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="bankStatus" />
+
+            <TextView
+                android:id="@+id/insuranceStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="insuranceStatus" />
+
+            <TextView
+                android:id="@+id/financeStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="financeStatus" />
+
+            <TextView
+                android:id="@+id/syariahStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="syariahStatus" />
+
+            <TextView
+                android:id="@+id/sekuritasStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="sekuritasStatus" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -178,18 +214,34 @@
             android:layout_height="wrap_content"
             android:text="Send" />
 
-        <TextView
-            android:id="@+id/result"
+        <Button
+            android:id="@+id/btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="status" />
+            android:layout_weight="1"
+            android:text="Update" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/logout"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Log Out" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Log Out" />
+
+        <Button
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Refresh" />
+
+    </LinearLayout>
+
 </LinearLayout>

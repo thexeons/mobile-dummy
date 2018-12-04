@@ -1,6 +1,5 @@
 package com.example.hazelnut.dummy;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -39,10 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -51,6 +46,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class MainActivity extends AppCompatActivity {
 
     //Set REST API media format to JSON
@@ -58,20 +55,23 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client;
 
     //variable declaraton
-    Button sendButton, takeButton, importButton, logout;
+    Button sendButton, takeButton, importButton, logout,refresh;
 
     ImageView imageView;
 
     EditText nameFirst, nameLast, ktp, email, dob, address, nationality, accountNumber, photo, ipInput;
 
-    TextView resultText;
+    TextView bankStatus, insuranceStatus, financeStatus, syariahStatus, sekuritasStatus;
 
     RadioGroup radioUnitGroup;
     RadioButton radioUnitButton;
 
     Bitmap img;
     //Rest API endpoint
-    String api = ":8090/newBlock/";
+    String api = ":8095/newBlock/";
+    String api2 = ":8095/getUserDetail/";
+    String statusjson;
+    Status statusfinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +92,16 @@ public class MainActivity extends AppCompatActivity {
         ipInput = findViewById(R.id.ipInput);
         sendButton = findViewById(R.id.btn_kirim);
         takeButton = findViewById(R.id.btn_takepicture);
-        resultText = findViewById(R.id.result);
+        bankStatus = findViewById(R.id.bankStatus);
+        insuranceStatus = findViewById(R.id.insuranceStatus);
+        financeStatus = findViewById(R.id.financeStatus);
+        syariahStatus = findViewById(R.id.syariahStatus);
+        sekuritasStatus = findViewById(R.id.sekuritasStatus);
         imageView  = findViewById(R.id.texture);
         importButton = findViewById(R.id.btn_importpicture);
         radioUnitGroup = findViewById(R.id.radioUnit);
         logout = findViewById(R.id.logout);
+        refresh = findViewById(R.id.refresh);
 
         //Request camera permission to avoid crash
 
@@ -169,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                resultText.setText("");
-
                 // initialize intent to capture image from Camera
                 Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 //send it to Activity Result (case 1 request code 100)
@@ -211,6 +214,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendpost(ktp.getText().toString(),ipInput.getText().toString());
+                ObjectMapper mapper = new ObjectMapper();
+                Status status = null;
+                try {
+                    status = mapper.readValue(statusjson, Status.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                statusfinal = status;
+                bankStatus.setText(statusfinal.getBankStatus());
+                insuranceStatus.setText(statusfinal.getInsuranceStatus());
+                syariahStatus.setText(statusfinal.getSyariahStatus());
+                financeStatus.setText(statusfinal.getFinanceStatus());
+                sekuritasStatus.setText(statusfinal.getSekuritasStatus());
+            }
+        });
     }
     ////////////////////////
 
@@ -282,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
     protected String base64encode(Bitmap img)
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -352,7 +373,47 @@ public class MainActivity extends AppCompatActivity {
                 .post(body)
                 .build();
 
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.w("failure Response", e.getMessage());
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful())
+                {
+                    String result = response.body().string(); //jangan panggil response body lebih dari sekali
+                    Log.w("SUCCESS", result);
+                }
+            }
+        });
+    }
+
+    protected void sendpost(String ktp,  String ipnumber)
+    {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(50,TimeUnit.SECONDS)
+                .readTimeout(50,TimeUnit.SECONDS)
+                .build();
+
+        JSONObject postdata = new JSONObject();
+        try {
+
+            postdata.put("ktp",ktp);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
+
+        final Request request = new Request.Builder()
+                .url("http://"+ ipnumber + api2)
+                .post(body)
+                .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -365,10 +426,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (response.isSuccessful())
                 {
-
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
                     Log.w("SUCCESS", result);
-
+                    statusjson = result;
                 }
             }
         });
