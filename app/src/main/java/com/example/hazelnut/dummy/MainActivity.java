@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
     String api = ":8095/tempBlock/";
     String api2 = ":8095/getUserDetail/";
     String api3 = ":8095/fetchData/";
-    String statusjson;
+    String api4 = ":8095/updateBlock/";
+    String statusjson = "";
     String fetchjson;
-    Status statusfinal;
 
 
     @Override
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         //ArrayList<HashMap<String, String>> userData = db.GetBlocks();
 
         //fetch data
+
         Intent i = getIntent();
         String tempuser = i.getStringExtra("username");
         sendpost(tempuser,"a",ipInput.getText().toString());
@@ -239,26 +242,46 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendpost(ktp.getText().toString(),ipInput.getText().toString());
-                ObjectMapper mapper = new ObjectMapper();
-                Status status = null;
-                try {
-                    status = mapper.readValue(statusjson, Status.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                statusfinal = status;
-                bankStatus.setText(statusfinal.getBankStatus());
-                insuranceStatus.setText(statusfinal.getInsuranceStatus());
-                syariahStatus.setText(statusfinal.getSyariahStatus());
-                financeStatus.setText(statusfinal.getFinanceStatus());
-                sekuritasStatus.setText(statusfinal.getSekuritasStatus());
             }
         });
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int selectedId = radioUnitGroup.getCheckedRadioButtonId();
+                String unit = "";
+                radioUnitButton = findViewById(selectedId);
+                if(radioUnitButton.getText().equals("BCA Bank"))
+                {
+                    unit = "bcabank";
+                }
+                else if(radioUnitButton.getText().equals("BCA Insurance"))
+                {
+                    unit = "bcainsurance";
+                }
+                else if(radioUnitButton.getText().equals("BCA Finance"))
+                {
+                    unit = "bcafinancial";
+                }
+                else if(radioUnitButton.getText().equals("BCA Syariah"))
+                {
+                    unit = "bcasyariah";
+                }
+                else if(radioUnitButton.getText().equals("BCA Sekuritas"))
+                {
+                    unit = "bcasekuritas";
+                }
+                updatepost(nameFirst.getText().toString(),
+                        nameLast.getText().toString(),
+                        ktp.getText().toString(),
+                        email.getText().toString(),
+                        dob.getText().toString(),
+                        address.getText().toString(),
+                        nationality.getText().toString(),
+                        accountNumber.getText().toString(),
+                        photo.getText().toString(),
+                        ipInput.getText().toString(),
+                        unit);
             }
         });
     }
@@ -419,6 +442,84 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void updatepost(String firstname, String lastname, String ktp, String email, String dob, String address, String nationality, String accountnum, String photo,  String ipnumber, String unit)
+    {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(50,TimeUnit.SECONDS)
+                .readTimeout(50,TimeUnit.SECONDS)
+                .build();
+
+        String bcabank, bcainsurance, bcafinancial, bcasekuritas,bcasyariah;
+        bcabank = bcainsurance = bcafinancial = bcasekuritas = bcasyariah = "0";
+        if(unit.equals("bcabank"))
+        {
+            bcabank = "1";
+        }
+        else if(unit.equals("bcainsurance"))
+        {
+            bcainsurance = "1";
+        }
+        else if(unit.equals("bcafinancial"))
+        {
+            bcafinancial = "1";
+        }
+        else if(unit.equals("bcasekuritas"))
+        {
+            bcasekuritas = "1";
+        }
+        else if(unit.equals("bcasyariah"))
+        {
+            bcasyariah = "1";
+        }
+
+        JSONObject postdata = new JSONObject();
+        try {
+            postdata.put("firstname",firstname);
+            postdata.put("lastname",lastname);
+            postdata.put("ktp",ktp);
+            postdata.put("email",email);
+            postdata.put("dob",dob);
+            postdata.put("address",address);
+            postdata.put("nationality",nationality);
+            postdata.put("accountnum",accountnum);
+            postdata.put("photo",photo);
+            postdata.put("bcabank",bcabank);
+            postdata.put("bcainsurance",bcainsurance);
+            postdata.put("bcafinancial",bcafinancial);
+            postdata.put("bcasekuritas",bcasekuritas);
+            postdata.put("bcasyariah",bcasyariah);
+            postdata.put("verified","0");
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
+
+        final Request request = new Request.Builder()
+                .url("http://"+ ipnumber + api4)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.w("FAILED: ", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful())
+                {
+                    String result = response.body().string(); //jangan panggil response body lebih dari sekali
+                    Log.w("SUCCESS: ", result);
+                }
+            }
+        });
+    }
+
     protected void sendpost(String ktp,  String ipnumber)
     {
         client = new OkHttpClient.Builder()
@@ -457,6 +558,23 @@ public class MainActivity extends AppCompatActivity {
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
                     Log.w("SUCCESS: ", result);
                     statusjson = result;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Status status = new Status();
+                            ObjectMapper mapper = new ObjectMapper();
+                            try {
+                                status = mapper.readValue(statusjson, Status.class);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            bankStatus.setText(status.getBankStatus());
+                            insuranceStatus.setText(status.getInsuranceStatus());
+                            syariahStatus.setText(status.getSyariahStatus());
+                            financeStatus.setText(status.getFinanceStatus());
+                            sekuritasStatus.setText(status.getSekuritasStatus());
+                        }
+                    });
                 }
             }
         });
@@ -499,7 +617,6 @@ public class MainActivity extends AppCompatActivity {
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
                     Log.w("SUCCESS: ", result);
                     fetchjson = result;
-
                 }
             }
         });

@@ -141,12 +141,10 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                         startActivity(pindah);
-
                     }
                     else
                     {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
-
                             @Override
                             public void run() {
                                 Toast.makeText(LoginActivity.this, "Login Failed!",Toast.LENGTH_LONG).show();
