@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button checkButton;
     EditText usernameText, passwordText,ktpText;
 
+
     public static final String key = "TeddyGembelGante";
     public static final String initVector = "GembelTeddyGante";
 
@@ -72,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //response 1 : KTP EXISTED
                 //response 2 : USERNAME EXISTED
                 //response 3 : KTP USERNAME EXISTED
-                //response 4 :
+                //response 4 : VALID
             }
         });
     }
@@ -85,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .build();
 
         JSONObject postdata = new JSONObject();
-        String sendpassword = password.replaceAll("\n","");
+        final String sendpassword = password.replaceAll("\n","");
         try {
             postdata.put("username",username);
             postdata.put("password",sendpassword);
@@ -106,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.w("FAILED: ", e.getMessage());
+                Log.w("failure Response", e.getMessage());
             }
 
             @Override
@@ -114,18 +115,40 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (response.isSuccessful())
                 {
-                    final String result = response.body().string(); //jangan panggil response body lebih dari sekali
-                    Log.w("SUCCESS: ", result);
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(RegisterActivity.this,result,Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    String result = response.body().string(); //jangan panggil response body lebih dari sekali
+                    Log.w("SUCCESS", result);
+                    if(result.equals("4")) //1 berhasil, 0 angka
+                    {
+                        Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
+                        pindah.putExtra("username",usernameText.getText().toString());
+                        pindah.putExtra("password", sendpassword);
+                        pindah.putExtra("ktp",ktpText.getText().toString());
+                        pindah.putExtra("mode","2"); //submit new registration
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(RegisterActivity.this, "Check data Success!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        startActivity(pindah);
+                    }
+                    else
+                    {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(RegisterActivity.this, "Check data Failed!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
             }
         });
     }
+
+
+
 
     public static String AESEncrypt(String password){
         try{

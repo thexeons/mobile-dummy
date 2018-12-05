@@ -133,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
                         pindah.putExtra("username",usernama);
+                        pindah.putExtra("mode","1"); //login registered user
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                             @Override

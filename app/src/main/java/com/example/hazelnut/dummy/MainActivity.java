@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     String api4 = ":8095/updateBlock/";
     String statusjson = "";
     String fetchjson;
+    Block fetchedBlock = new Block();
 
 
     @Override
@@ -123,24 +124,19 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         String tempuser = i.getStringExtra("username");
-        sendpost(tempuser,"a",ipInput.getText().toString());
-        ObjectMapper mapper = new ObjectMapper();
-        Block fetched = new Block();
-        try {
-            fetched = mapper.readValue(fetchjson, Block.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String mode = i.getStringExtra("mode");
+        String tempktp = i.getStringExtra("ktp");
+        String temppassword = i.getStringExtra("password");
+
+        if(mode.equals("1")) {
+            sendpost(tempuser, "a", ipInput.getText().toString());
+
         }
-        //insert fetched data
-        nameFirst.setText(fetched.getFirstname());
-        nameLast.setText(fetched.getLastname());
-        ktp.setText(fetched.getKtp());
-        email.setText(fetched.getEmail());
-        dob.setText(fetched.getDob());
-        address.setText(fetched.getAddress());
-        nationality.setText(fetched.getNationality());
-        accountNumber.setText(fetched.getAccountnum());
-        photo.setText(fetched.getPhoto());
+        else if(mode.equals("2"))
+        {
+            ktp.setText(tempktp);
+            ktp.setEnabled(false);
+        }
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -616,7 +612,29 @@ public class MainActivity extends AppCompatActivity {
                 {
                     String result = response.body().string(); //jangan panggil response body lebih dari sekali
                     Log.w("SUCCESS: ", result);
-                    fetchjson = result;
+                    ObjectMapper mapper = new ObjectMapper();
+                    Block fetched = new Block();
+                    try {
+                        fetched = mapper.readValue(result, Block.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    fetchedBlock = fetched;
+                            //insert fetched data
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            nameFirst.setText(fetchedBlock.getFirstname());
+                            nameLast.setText(fetchedBlock.getLastname());
+                            ktp.setText(fetchedBlock.getKtp());
+                            email.setText(fetchedBlock.getEmail());
+                            dob.setText(fetchedBlock.getDob());
+                            address.setText(fetchedBlock.getAddress());
+                            nationality.setText(fetchedBlock.getNationality());
+                            accountNumber.setText(fetchedBlock.getAccountnum());
+                            photo.setText(fetchedBlock.getPhoto());
+                        }
+                    });
+
                 }
             }
         });
