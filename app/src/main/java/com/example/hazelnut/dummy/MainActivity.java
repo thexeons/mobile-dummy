@@ -71,9 +71,14 @@ public class MainActivity extends AppCompatActivity {
     String api2 = ":8095/getUserDetail/";
     String api3 = ":8095/fetchData/";
     String api4 = ":8095/updateBlock/";
+    String api6 = ":8095/submitUser/";
     String statusjson = "";
     String fetchjson;
     Block fetchedBlock = new Block();
+
+    String globalUser;
+    String globalPass;
+    String globalKtp;
 
 
     @Override
@@ -127,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
         String mode = i.getStringExtra("mode");
         String tempktp = i.getStringExtra("ktp");
         String temppassword = i.getStringExtra("password");
+        globalKtp = tempktp;
+        globalPass = temppassword;
+        globalUser = tempuser;
 
         if(mode.equals("1")) {
             sendpost(tempuser, "a", ipInput.getText().toString());
@@ -187,6 +195,11 @@ public class MainActivity extends AppCompatActivity {
                         photo.getText().toString(),
                         ipInput.getText().toString(),
                         unit);
+                try {
+                    Thread.sleep(100);
+                }catch(Exception e){}
+                sendpost(globalUser,globalPass,globalKtp,"dummy");
+
             }
         });
 
@@ -307,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     img = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, false);
-                    img = Bitmap.createScaledBitmap(img, image.getWidth()/5, image.getHeight()/5, false);
+                    img = Bitmap.createScaledBitmap(img, image.getWidth(), image.getHeight()/5, false);
 
                 }catch (Exception e)
                 {
@@ -575,6 +588,57 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    protected void sendpost(String username, String password, String ktp, String ipnumber)
+    {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(50,TimeUnit.SECONDS)
+                .readTimeout(50,TimeUnit.SECONDS)
+                .build();
+
+        JSONObject postdata = new JSONObject();
+        try {
+            postdata.put("username",username);
+            postdata.put("password", password);
+            postdata.put("ktp", ktp);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
+
+        final Request request = new Request.Builder()
+                .url("http://"+ "192.168.43.219" + api6)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.w("FAILED: ", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful())
+                {
+                    String result = response.body().string(); //jangan panggil response body lebih dari sekali
+                    Log.w("SUCCESS: ", result);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Submit Success!",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     protected void sendpost(String username, String dummy,String ipnumber)
     {
         client = new OkHttpClient.Builder()
