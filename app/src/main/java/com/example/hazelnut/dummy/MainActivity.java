@@ -198,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Thread.sleep(100);
                 }catch(Exception e){}
-                sendpost(globalUser,globalPass,globalKtp,"dummy");
 
+                sendpost(globalUser,globalPass,ktp.getText().toString(),"dummy");
             }
         });
 
@@ -309,10 +309,17 @@ public class MainActivity extends AppCompatActivity {
             //edit the image
             img = Bitmap.createBitmap(oriImage, 0, 0, oriImage.getWidth(), oriImage.getHeight(), matrix, false);
             //display in imageview
-            img = Bitmap.createScaledBitmap(img, oriImage.getWidth() + 100, oriImage.getHeight() + 100, false);
+            if(img.getWidth()>img.getHeight())
+            {
+                img = Bitmap.createScaledBitmap(img, 320, 160, false);
+            }
+            else if(img.getHeight()>img.getWidth())
+            {
+                img = Bitmap.createScaledBitmap(img, 160, 320, false);
+            }
             imageView.setImageBitmap(img);
 
-            // masukkin deh ke img.
+            // insert to img
             photo.setText(base64encode(img));
         } else {
             if (requestCode == 200) {
@@ -320,8 +327,14 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     img = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, false);
-                    img = Bitmap.createScaledBitmap(img, image.getWidth(), image.getHeight()/5, false);
-
+                    if(img.getWidth()>img.getHeight())
+                    {
+                        img = Bitmap.createScaledBitmap(img, 320, 160, false);
+                    }
+                    else if(img.getHeight()>img.getWidth())
+                    {
+                        img = Bitmap.createScaledBitmap(img, 160, 320, false);
+                    }
                 }catch (Exception e)
                 {
                     //handle exception

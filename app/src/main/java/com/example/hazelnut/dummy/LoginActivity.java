@@ -17,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
@@ -69,11 +71,36 @@ public class LoginActivity extends AppCompatActivity {
         skipButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(pindah);
+                new ConnectionHandler().execute("http://www.google.com/");
             }
         });
     }
+
+    public static String getStatus(String url) throws IOException {
+
+        String result = "";
+        int code = 200;
+        try {
+            URL siteURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(3000);
+            connection.connect();
+
+            code = connection.getResponseCode();
+            if (code == 200) {
+                result = "-> Green <-\t" + "Code: " + code;
+            } else {
+                result = "-> Yellow <-\t" + "Code: " + code;
+            }
+        } catch (Exception e) {
+            result = "-> Red <-\t" + "Wrong domain - Exception: " + e.getMessage();
+
+        }
+        System.out.println(url + "\t\tStatus:" + result);
+        return result;
+    }
+
     public static String AESEncrypt(String password){
         try{
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
@@ -91,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
-    protected void sendpost(final String usernama, String password)
+    protected void sendpost(final String  usernama, String password)
     {
         client = new OkHttpClient.Builder()
                 .connectTimeout(50,TimeUnit.SECONDS)
