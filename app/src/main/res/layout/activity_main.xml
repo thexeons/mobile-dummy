@@ -1,247 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Insert data to Blockchain : " />
-
-    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:padding="40px"
+        tools:context=".MainActivity"
+        android:background="@drawable/bgdarkblue">
 
-        <EditText
-            android:id="@+id/nameFirst"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="first name" />
-        <EditText
-            android:id="@+id/nameLast"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="last name" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/address"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="address" />
-
-        <EditText
-            android:id="@+id/dob"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="dob" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/ktp"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="no ktp" />
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="email" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/accountNumber"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="acc number" />
-
-        <EditText
-            android:id="@+id/nationality"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="nationality" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/photo"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="photo" />
 
         <Button
-            android:id="@+id/btn_takepicture"
+            android:id="@+id/profileBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Take" />
-
-        <Button
-            android:id="@+id/btn_importpicture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Import" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioGroup
-            android:id="@+id/radioUnit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/radioBank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="BCA Bank" />
-
-            <RadioButton
-                android:id="@+id/radioInsurance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BCA Insurance" />
-
-            <RadioButton
-                android:id="@+id/radioFinance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BCA Finance" />
-
-            <RadioButton
-                android:id="@+id/radioSyariah"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BCA Syariah" />
-
-            <RadioButton
-                android:id="@+id/radioSekuritas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BCA Sekuritas" />
-
-        </RadioGroup>
-
-        <ImageView
-            android:id="@+id/texture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxHeight="150dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds ="true"/>
+            android:layout_marginBottom="40px"
+            android:paddingHorizontal="40px"
+            android:paddingVertical="60px"
+            android:text="Profile"
+            android:textSize="10pt"
+            android:textAlignment="viewStart"
+            android:background="@drawable/cardviewbg"/>
 
         <LinearLayout
+            android:id="@+id/stat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/bankStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="bankStatus" />
-
-            <TextView
-                android:id="@+id/insuranceStatus"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/profileBtn"
+            >
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="insuranceStatus" />
-
-            <TextView
-                android:id="@+id/financeStatus"
+                android:padding="40px"
+                android:layout_marginTop="40px"
+                android:background="@drawable/cardviewbg"
+                android:id="@+id/cv1"
+                android:clickable="true"
+                android:layout_below="@+id/photoForm">
+                <ImageView
+                    android:layout_width="500px"
+                    android:layout_height="100px"
+                    android:src="@drawable/bcabank"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/cv1iv"
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_gravity="center"
+                        android:background="@drawable/statuspartverified"/>
+                    <TextView
+                        android:id="@+id/cv1tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textColor="@android:color/holo_orange_light"
+                        android:layout_marginLeft="20px"
+                        android:textSize="6pt"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="financeStatus" />
-
-            <TextView
-                android:id="@+id/syariahStatus"
+                android:padding="40px"
+                android:layout_marginTop="40px"
+                android:background="@drawable/cardviewbg"
+                android:id="@+id/cv2"
+                android:layout_below="@+id/photoForm">
+                <ImageView
+                    android:layout_width="500px"
+                    android:layout_height="100px"
+                    android:src="@drawable/bcainsurance"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/cv2iv"
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_gravity="center"
+                        android:background="@drawable/statuspartverified"/>
+                    <TextView
+                        android:id="@+id/cv2tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textColor="@android:color/holo_orange_light"
+                        android:layout_marginLeft="20px"
+                        android:textSize="6pt"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="syariahStatus" />
-
-            <TextView
-                android:id="@+id/sekuritasStatus"
+                android:padding="40px"
+                android:layout_marginTop="40px"
+                android:background="@drawable/cardviewbg"
+                android:id="@+id/cv3"
+                android:layout_below="@+id/photoForm">
+                <ImageView
+                    android:layout_width="500px"
+                    android:layout_height="100px"
+                    android:src="@drawable/bcafinance"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/cv3iv"
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_gravity="center"
+                        android:background="@drawable/statuspartverified"/>
+                    <TextView
+                        android:id="@+id/cv3tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textColor="@android:color/holo_orange_light"
+                        android:layout_marginLeft="20px"
+                        android:textSize="6pt"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="sekuritasStatus" />
+                android:padding="40px"
+                android:layout_marginTop="40px"
+                android:background="@drawable/cardviewbg"
+                android:id="@+id/cv4"
+                android:layout_below="@+id/photoForm">
+                <ImageView
+                    android:layout_width="500px"
+                    android:layout_height="100px"
+                    android:src="@drawable/bcasyariah"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/cv4iv"
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_gravity="center"
+                        android:background="@drawable/statuspartverified"/>
+                    <TextView
+                        android:id="@+id/cv4tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textColor="@android:color/holo_orange_light"
+                        android:layout_marginLeft="20px"
+                        android:textSize="6pt"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="40px"
+                android:layout_marginTop="40px"
+                android:background="@drawable/cardviewbg"
+                android:id="@+id/cv5"
+                android:layout_below="@+id/photoForm">
+                <ImageView
+                    android:layout_width="500px"
+                    android:layout_height="100px"
+                    android:src="@drawable/bcasekuritas"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/cv5iv"
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_gravity="center"
+                        android:background="@drawable/statuspartverified"/>
+                    <TextView
+                        android:id="@+id/cv5tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textColor="@android:color/holo_orange_light"
+                        android:layout_marginLeft="20px"
+                        android:textSize="6pt"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stat"
+            android:layout_marginTop="40px"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="600px"
+                android:layout_height="150px"
+                android:text="Log Out"
+                android:layout_marginRight="40px"
+                android:background="@drawable/borderbg"
+                />
 
-    </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/refresh"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/ipInput"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:hint="Server IP Address" />
-
-        <Button
-            android:id="@+id/btn_kirim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send" />
-
-        <Button
-            android:id="@+id/btn_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Update" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="40px"
+        android:backgroundTint="#33ffdd"
+        android:src="@drawable/refresh"
+        />
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Log Out" />
 
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Refresh" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

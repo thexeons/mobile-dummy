@@ -1,53 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+    tools:context=".MainActivity"
+    android:background="@drawable/bgdarkblue"
+    android:padding="40px">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/stepper"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/usernameText"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:hint="username" />
-
-        <EditText
-            android:id="@+id/passwordText"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:hint="password" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/ktpText"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:hint="No. KTP" />
-
-        <Button
-            android:id="@+id/check"
+        android:orientation="horizontal"
+        android:layout_marginTop="40px"
+        android:layout_centerHorizontal="true">
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Check" />
+            android:layout_marginHorizontal="60px"
+            android:src="@drawable/stepper3"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60px"
+            android:src="@drawable/stepper1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60px"
+            android:src="@drawable/stepper1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60px"
+            android:src="@drawable/stepper1"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert your personal details"
+        android:textSize="8pt"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/stepper"
+        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:layout_below="@+id/stepper"
+        android:id="@+id/signupForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/cardviewbg"
+        android:padding="40px"
+        android:layout_marginTop="80px"
+        >
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/ktpText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="No. KTP"
+                android:backgroundTint="@android:color/holo_blue_light"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/usernameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:hint="username"
+                android:layout_below="@+id/ktpText"
+                android:backgroundTint="@android:color/holo_blue_light"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/passwordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:layout_below="@+id/usernameText"
+                android:backgroundTint="@android:color/holo_blue_light"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/repasswordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="re-type password"
+                android:inputType="textPassword"
+                android:layout_below="@+id/passwordText"
+                android:backgroundTint="@android:color/holo_blue_light"/>
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/check"
+        android:layout_width="600px"
+        android:layout_marginTop="40px"
+        android:layout_height="wrap_content"
+        android:text="NEXT"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/borderbg"
+        android:layout_below="@+id/signupForm"
+        />
 
-</LinearLayout>
+</RelativeLayout>

@@ -20,55 +20,55 @@
         android:src="@drawable/innerchainv"
         android:layout_centerHorizontal="true"
         />
-    <RelativeLayout
-        android:id="@+id/loginForm"
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/devForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/cardviewbg"
         android:padding="40px"
         android:layout_below="@+id/icon">
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/ip1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="username"
+            android:hint="ip1"
             android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/ip2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="password"
-            android:inputType="textPassword"
-            android:layout_below="@+id/username"
+            android:hint="ip2"
+            android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
-    </RelativeLayout>
+        <EditText
+            android:id="@+id/ip3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ip3"
+            android:inputType="text"
+            android:backgroundTint="@android:color/holo_blue_dark"/>
+        <EditText
+            android:id="@+id/ip4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ip4"
+            android:inputType="text"
+            android:backgroundTint="@android:color/holo_blue_dark"/>
+        <EditText
+            android:id="@+id/ip5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ip5"
+            android:inputType="text"
+            android:backgroundTint="@android:color/holo_blue_dark"/>
 
-    <LinearLayout
-        android:id="@+id/ButtonForm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/loginForm">
-        <Button
-            android:id="@+id/registerText"
-            android:layout_width="400px"
-            android:layout_height="150px"
-            android:layout_margin="40px"
-            android:background="@drawable/borderbg"
-            android:text="SIGN UP" />
-        <Button
-            android:id="@+id/loginButton"
-            android:layout_width="400px"
-            android:layout_height="150px"
-            android:layout_margin="40px"
-            android:background="@drawable/borderbg"
-            android:text="LOGIN" />
     </LinearLayout>
     <Button
         android:id="@+id/devBtn"
-        android:layout_below="@+id/ButtonForm"
+        android:layout_marginTop="40px"
+        android:layout_below="@+id/devForm"
         android:layout_centerHorizontal="true"
         android:background="@drawable/borderbg"
         android:layout_width="600px"
@@ -78,6 +78,6 @@
         android:id="@+id/result"
         android:layout_width="180dp"
         android:layout_height="50dp"
-        android:text="result"
-        android:visibility="visible"/>
+        android:text="DEVELOPER"
+        android:visibility="invisible"/>
 </RelativeLayout>

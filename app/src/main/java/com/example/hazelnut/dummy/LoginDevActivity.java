@@ -3,20 +3,15 @@ package com.example.hazelnut.dummy;
 import android.app.NotificationManager;
 import android.app.TaskStackBuilder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
@@ -41,21 +38,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginDevActivity extends AppCompatActivity {
 
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     OkHttpClient client;
     Button loginButton, signupButton, devButton;
     EditText username, password, ipkampret;
     TextView registerText, resultText;
-    String ip = "localhost";
+    //String[] m = new String[5];
+    String ip,m1,m2,m3,m4,m5;
     String api = "/verifyLogin/";
-    String m1 = "192.168.43.219:8095";
-    String m2 = "192.168.43.171:8096";
-    String m3 = "192.168.43.100:8097";
-    String m4 = "192.168.43.101:8098";
-    String m5 = "192.168.43.102:8099";
-    String ipalt = "192.168.2.109:8095";
     int notificationId = 1;
 
     final Context context = this;
@@ -73,37 +65,64 @@ public class LoginActivity extends AppCompatActivity {
         resultText= findViewById(R.id.result);
         //skipButton = findViewById(R.id.skip);
 
+        Intent i = getIntent();
+        String[] m = {i.getStringExtra("m1"),
+                i.getStringExtra("m2"),
+                i.getStringExtra("m3"),
+                i.getStringExtra("m4"),
+                i.getStringExtra("m5")};
+        /*
+        m[1] = i.getStringExtra("m1");
+        m[2] = i.getStringExtra("m2");
+        m[3] = i.getStringExtra("m3");
+        m[4] = i.getStringExtra("m4");
+        m[5] = i.getStringExtra("m5");
+        */
+        ip = i.getStringExtra("ip");
+        new ConnectionHandler().execute("http://www.google.com");
+        new ConnectionHandler().onPostExecute("test");
 
 
-        addNotif();
+        resultText.setText(m[0]+m[1]+m[2]+m[3]+m[4]);
+        String result;
+        int code;
+        int j;
+        for (j=0 ; j<1 ; j++) {
+            try {
+                URL siteURL = new URL("http://" + m[j]);
+                HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(100);
+                connection.connect();
 
-        ip=m1;/*
-            if (new ConnectionHandler().execute(m1).equals("1"))
-            {
-                ip = m1;
+                code = connection.getResponseCode();
+                if (code == 200) {
+                    result = "Success";
+                } else {
+                    result = "Fail";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = "Error";
             }
-            else if (new ConnectionHandler().execute(m2).equals("1"))
-            {
-                ip = m2;
+            System.out.println("http://" + m[j] + "-----" +result);
+            if (result.equals("Success")) {
+                ip = m[j];
+                break;
             }
-            else if (new ConnectionHandler().execute(m3).equals("1"))
-            {
-                ip = m3;
-            }
-            else if (new ConnectionHandler().execute(m4).equals("1"))
-            {
-                ip = m4;
-            }
-            else
-            {
-                ip = m1;
-            }
-            */
+
+        }
+        if(new ConnectionHandler().execute("Http://www.google.com").toString().endsWith("1")){
+            System.out.println("-------------------------");
+        }
+        pinger("http://www.google.com");
+
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNotif();
+                System.out.println("------ini ip yang dipake"+ip);
                 final String encryptedpassword = AESEncrypt(password.getText().toString());
                 sendpost(username.getText().toString(),encryptedpassword);
             }});
@@ -144,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                addNotif();
+                System.out.println("------ini ip yang dipake"+ip);
                 Intent pindah = new Intent(getApplicationContext(), RegisterActivity.class);
                 pindah.putExtra("ip", ip);
                 startActivity(pindah);
@@ -170,13 +189,42 @@ public class LoginActivity extends AppCompatActivity {
         return null;
     }
 
+    public String pinger(String url){
+        String result = "";
+        int code = 200;
+
+        try {
+            URL siteURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(100);
+            connection.connect();
+
+            code = connection.getResponseCode();
+            if (code == 200) {
+                result = "1";
+            } else {
+                result = "2";
+            }
+        } catch (Exception e) {
+            result = "0";
+            e.printStackTrace();
+        }
+        System.out.println(url+ "\t\tStatus:" + result);
+        if (result == "1"){
+            return url;
+        }
+        else
+            return null;
+    }
+
     public void addNotif(){
-        NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(LoginActivity.this);
+        NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(LoginDevActivity.this);
         mbuilder.setSmallIcon(R.drawable.innerchainv);
         mbuilder.setContentTitle("Innerchain");
         mbuilder.setContentText("You have been accepted");
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(LoginActivity.this);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(LoginDevActivity.this);
         stackBuilder.addParentStack(MainActivity.class);
 
 
@@ -202,7 +250,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
-        resultText.setText(postdata.toString());
+        resultText.setText(ip);
 
         final Request request = new Request.Builder()
                 .url("http://"+ ip + api)
@@ -232,14 +280,14 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void run() {
-                                Toast.makeText(LoginActivity.this, "Login Success!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginDevActivity.this, "Login Success!",Toast.LENGTH_LONG).show();
                             }
                         });
                         startActivity(pindah);
                     }
                     else if(result.equals("2"))
                     {
-                        Intent intent = new Intent(LoginActivity.this, BlacklistActivity.class);
+                        Intent intent = new Intent(LoginDevActivity.this, BlacklistActivity.class);
                         startActivity(intent);
                     }
                     else
@@ -247,7 +295,7 @@ public class LoginActivity extends AppCompatActivity {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(LoginActivity.this, "Login Failed!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginDevActivity.this, "Login Failed!",Toast.LENGTH_LONG).show();
                             }
                         });
                     }

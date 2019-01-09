@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -37,11 +36,13 @@ public class RegisterActivity extends AppCompatActivity {
     //Set REST API media format to JSON
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     OkHttpClient client;
-    String api5 = ":8095/verifyRegister/";
+    String api5 = "/verifyRegister/";
 
     //button
     Button checkButton;
-    EditText usernameText, passwordText,ktpText;
+    EditText usernameText, passwordText,ktpText, repasswordText;
+    String errorlbl;
+    String ip;
 
 
     public static final String key = "TeddyGembelGante";
@@ -54,26 +55,48 @@ public class RegisterActivity extends AppCompatActivity {
         checkButton = findViewById(R.id.check);
         usernameText = findViewById(R.id.usernameText);
         passwordText = findViewById(R.id.passwordText);
+        repasswordText = findViewById(R.id.repasswordText);
         ktpText = findViewById(R.id.ktpText);
 
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        mToolbar.setTitle(getString(R.string.app_name));
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        Intent i = getIntent();
+        ip = i.getStringExtra("ip");
+
+
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String encryptedpassword = AESEncrypt(passwordText.getText().toString());
-                sendpost(usernameText.getText().toString(),encryptedpassword,ktpText.getText().toString(),"192.168.43.219");
-                //response 1 : KTP EXISTED
-                //response 2 : USERNAME EXISTED
-                //response 3 : KTP USERNAME EXISTED
-                //response 4 : VALID
+                System.out.println(ip);
+                errorlbl = "";
+                if (ktpText.getText().toString().matches("[0-9]+") == false || ktpText.getText().toString().length() != 16) {
+                    errorlbl = "KTP must be 16 digit";
+                }
+                else if (usernameText.getText().toString().matches("[A-Za-z0-9]+")==false || usernameText.getText().toString().length()<5) {
+                    errorlbl = "Username cannot contain symbol and must be more than 4";
+                }
+                else if (passwordText.getText().toString().matches("[A-Za-z0-9]+") == false || passwordText.getText().toString().length()<5) {
+                    errorlbl = "Password cannot contain symbol and must be more than 4";
+                }
+                else if (!passwordText.getText().toString().equals(repasswordText.getText().toString())){
+                    errorlbl = "Password did not match";
+                }
+                else {
+                    String encryptedpassword = AESEncrypt(passwordText.getText().toString());
+                    sendpost(usernameText.getText().toString(), encryptedpassword, ktpText.getText().toString(), "192.168.43.219");
+                    //response 1 : KTP EXISTED
+                    //response 2 : USERNAME EXISTED
+                    //response 3 : KTP USERNAME EXISTED
+                    //response 4 : VALID
+                }
+
+                if (!errorlbl.equals("")) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RegisterActivity.this, errorlbl, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
             }
         });
     }
@@ -100,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(MEDIA_TYPE, postdata.toString());
 
         final Request request = new Request.Builder()
-                .url("http://"+ "192.168.43.219" + api5)
+                .url("http://"+ ip + api5)
                 .post(body)
                 .build();
 
@@ -119,11 +142,12 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.w("SUCCESS", result);
                     if(result.equals("4")) //1 berhasil, 0 angka
                     {
-                        Intent pindah = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent pindah = new Intent(getApplicationContext(), Register2Activity.class);
                         pindah.putExtra("username",usernameText.getText().toString());
                         pindah.putExtra("password", sendpassword);
                         pindah.putExtra("ktp",ktpText.getText().toString());
-                        pindah.putExtra("mode","2"); //submit new registration
+                        pindah.putExtra("mode","2");//submit new registration
+                        pindah.putExtra("ip",ip);
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                             @Override
@@ -132,6 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
                         startActivity(pindah);
+                        finish();
                     }
                     else
                     {
