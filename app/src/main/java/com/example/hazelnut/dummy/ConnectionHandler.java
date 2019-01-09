@@ -11,7 +11,6 @@ public class ConnectionHandler extends AsyncTask<String , Void ,String> {
 
         String result = "";
         int code = 200;
-
         try {
             URL siteURL = new URL(strings[0]);
             HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
@@ -21,23 +20,22 @@ public class ConnectionHandler extends AsyncTask<String , Void ,String> {
 
             code = connection.getResponseCode();
             if (code == 200) {
-                result = "1";
+                result = "-> AVAILABLE <-\t" + "Code: " + code;
+                ;
             } else {
-                result = "2";
+                result = "-> REDIRECTED <-\t" + "Code: " + code;
             }
         } catch (Exception e) {
-            result = "0";
+            result = "-> NOT AVAILABLE:  <-\t" + e.getMessage();
 
         }
         System.out.println(strings[0] + "\t\tStatus:" + result);
-        if (result == "1"){
-            return strings[0];
-        }
-        else
-            return null;
+        return result;
     }
 
+    @Override
     protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 }
 
