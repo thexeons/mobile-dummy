@@ -80,4 +80,17 @@
         android:layout_height="50dp"
         android:text="result"
         android:visibility="visible"/>
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="0"
+        android:max="100"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_gravity="bottom"
+        android:indeterminate="false"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        />
 </RelativeLayout>

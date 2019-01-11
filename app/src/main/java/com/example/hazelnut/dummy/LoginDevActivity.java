@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
@@ -43,12 +47,17 @@ public class LoginDevActivity extends AppCompatActivity {
     public static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     OkHttpClient client;
     Button loginButton, signupButton, devButton;
-    EditText username, password, ipkampret;
+    EditText username, password;
     TextView registerText, resultText;
-    //String[] m = new String[5];
+    ProgressBar pb;
     String ip,m1,m2,m3,m4,m5;
     String api = "/verifyLogin/";
     int notificationId = 1;
+    int flag=-1;
+    String globalip;
+    ArrayList<String> al = new ArrayList<String>();
+    ArrayList<String> pbal = new ArrayList<String>();
+    ArrayList<String> ipal = new ArrayList<String>();
 
     final Context context = this;
     public static final String key = "TeddyGembelGante";
@@ -64,67 +73,48 @@ public class LoginDevActivity extends AppCompatActivity {
         //registerText = findViewById(R.id.registerText);
         resultText= findViewById(R.id.result);
         //skipButton = findViewById(R.id.skip);
+        pb = findViewById(R.id.pb);
 
         Intent i = getIntent();
-        String[] m = {i.getStringExtra("m1"),
-                i.getStringExtra("m2"),
-                i.getStringExtra("m3"),
-                i.getStringExtra("m4"),
-                i.getStringExtra("m5")};
-        /*
-        m[1] = i.getStringExtra("m1");
-        m[2] = i.getStringExtra("m2");
-        m[3] = i.getStringExtra("m3");
-        m[4] = i.getStringExtra("m4");
-        m[5] = i.getStringExtra("m5");
-        */
+        ipal.add(i.getStringExtra("m1"));
+        ipal.add(i.getStringExtra("m2"));
+        ipal.add(i.getStringExtra("m3"));
+        ipal.add(i.getStringExtra("m4"));
+        ipal.add(i.getStringExtra("m5"));
+
         ip = i.getStringExtra("ip");
-        new ConnectionHandler().execute("http://www.google.com");
-        new ConnectionHandler().onPostExecute("test");
+        loginButton.setEnabled(false);
+        signupButton.setEnabled(false);
 
+        //resultText.setText(ipal.get(j));
 
-        resultText.setText(m[0]+m[1]+m[2]+m[3]+m[4]);
-        String result;
-        int code;
-        int j;
-        for (j=0 ; j<1 ; j++) {
-            try {
-                URL siteURL = new URL("http://" + m[j]);
-                HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setConnectTimeout(100);
-                connection.connect();
-
-                code = connection.getResponseCode();
-                if (code == 200) {
-                    result = "Success";
-                } else {
-                    result = "Fail";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                result = "Error";
+        pb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ConnectPinger().execute("http://"+ipal.get(0),
+                        "http://"+ipal.get(1),
+                        "http://"+ipal.get(2),
+                        "http://"+ipal.get(3),
+                        "http://"+ipal.get(4));
+                loginButton.setEnabled(true);
+                signupButton.setEnabled(true);
             }
-            System.out.println("http://" + m[j] + "-----" +result);
-            if (result.equals("Success")) {
-                ip = m[j];
-                break;
-            }
-
-        }
-        if(new ConnectionHandler().execute("Http://www.google.com").toString().endsWith("1")){
-            System.out.println("-------------------------");
-        }
-        pinger("http://www.google.com");
-
-
-
+        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("------ini ip yang dipake"+ip);
-                final String encryptedpassword = AESEncrypt(password.getText().toString());
-                sendpost(username.getText().toString(),encryptedpassword);
+
+                System.out.println(al.size());
+                if (al.size()!=0)
+                {
+                    ip = al.get(0).replaceAll("http://","");
+                    System.out.println("THIS IS YOOUR IP----------------"+ip);
+                }
+                if(al.size()!=0) {
+                    System.out.println("------ini ip yang dipake" + ip);
+                    final String encryptedpassword = AESEncrypt(password.getText().toString());
+                    sendpost(username.getText().toString(), encryptedpassword);
+                }
             }});
 
         devButton.setOnClickListener(new View.OnClickListener() {
@@ -141,37 +131,146 @@ public class LoginDevActivity extends AppCompatActivity {
                 finish();
             }
         });
-        /*
-        signupButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        password.setInputType(InputType.TYPE_CLASS_TEXT);
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        // Button is not pressed
-                    }
-                }
-                return true;
-            }
-        });
-        */
 
 
         signupButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                System.out.println("------ini ip yang dipake"+ip);
-                Intent pindah = new Intent(getApplicationContext(), RegisterActivity.class);
-                pindah.putExtra("ip", ip);
-                startActivity(pindah);
+                System.out.println(al.size());
+                if (al.size()!=0)
+                {
+                    ip = al.get(0).replaceAll("http://","");
+                    System.out.println("THIS IS YOOUR IP----------------"+ip);
+                }
+                if (al.size()!=0) {
+                    System.out.println("------ini ip yang dipake" + ip);
+                    Intent pindah = new Intent(getApplicationContext(), RegisterActivity.class);
+                    pindah.putExtra("ip", ip);
+                    startActivity(pindah);
+                }
             }
         });
-
-
     }
+    public class ConnectPinger extends AsyncTask<String , Integer ,List<String>> {
+
+        @Override
+        protected List<String> doInBackground(String... tasks) {
+
+            // Get the number of task
+            int count = tasks.length;
+            // Initialize a new list
+            List<String> taskList= new ArrayList<>(count);
+            for(int i =0;i<count;i++){
+                // Do the current task here
+                String currentTask = tasks[i];
+                taskList.add(currentTask);
+
+                String result = "";
+                int code = 200;
+                // Sleep the thread for 1 second
+                try {
+                    URL siteURL = new URL(currentTask);
+                    HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(750);
+                    connection.connect();
+
+                    code = connection.getResponseCode();
+                    if (code == 200) {
+                        result = "1";
+                        al.add(currentTask);
+                    } else {
+                        result = "2";
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Publish the async task progress
+                // Added 1, because index start from 0
+                publishProgress((int) (((i+1) / (float) count) * 100));
+
+                // If the AsyncTask cancelled
+                if(isCancelled()){
+                    break;
+                }
+            }
+
+            /*
+            String result;
+            int code = 200;
+            try {
+                URL siteURL = new URL(strings[0]);
+                HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(750);
+                connection.connect();
+
+                code = connection.getResponseCode();
+                if (code == 200) {
+                    result = "1";
+                    System.out.println("----------------SUCCESS");
+                    al.add(strings[0]);
+                } else {
+                    result = "2";
+                }
+            } catch (Exception e) {
+                result = "0";
+            }
+
+            int count = 5;
+            pbal.add("progress");
+            publishProgress(pbal.size()*20);
+            System.out.println(strings[0]+"-------result> "+result);
+            return "Success";
+            */
+            return taskList;
+        }
+
+        // After each task done
+        protected void onProgressUpdate(Integer... progress){
+            // Update the progress bar
+            pb.setProgress(progress[0]);
+        }
+        @Override
+        protected void onPostExecute(List<String> result) {
+            pb.incrementProgressBy(20);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static String AESEncrypt(String password){
         try{
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
@@ -189,34 +288,6 @@ public class LoginDevActivity extends AppCompatActivity {
         return null;
     }
 
-    public String pinger(String url){
-        String result = "";
-        int code = 200;
-
-        try {
-            URL siteURL = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(100);
-            connection.connect();
-
-            code = connection.getResponseCode();
-            if (code == 200) {
-                result = "1";
-            } else {
-                result = "2";
-            }
-        } catch (Exception e) {
-            result = "0";
-            e.printStackTrace();
-        }
-        System.out.println(url+ "\t\tStatus:" + result);
-        if (result == "1"){
-            return url;
-        }
-        else
-            return null;
-    }
 
     public void addNotif(){
         NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(LoginDevActivity.this);

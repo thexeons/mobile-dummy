@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                         sendpost(tempuser, ip);
                     }
                     try {
-                        SystemClock.sleep(100);
+                        SystemClock.sleep(1000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -509,6 +509,11 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         });
+                        cv1.setClickable(false);
+                        cv2.setClickable(false);
+                        cv3.setClickable(false);
+                        cv4.setClickable(false);
+                        cv5.setClickable(false);
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                             @Override
@@ -517,11 +522,6 @@ public class MainActivity extends AppCompatActivity {
                                 alert.show();
                             }
                         });
-                        cv1.setClickable(false);
-                        cv2.setClickable(false);
-                        cv3.setClickable(false);
-                        cv4.setClickable(false);
-                        cv5.setClickable(false);
                     } else {
                         cv1.setClickable(true);
                         cv2.setClickable(true);

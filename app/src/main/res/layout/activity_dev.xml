@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ip1"
+            android:text="192.168.43.219"
             android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
         <EditText
@@ -40,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ip2"
+            android:text="192.168.43.171"
             android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
         <EditText
@@ -47,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ip3"
+            android:text="192.168.43.217"
             android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
         <EditText
@@ -54,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ip4"
+            android:text="192.168.43.222"
             android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
         <EditText
@@ -61,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ip5"
+            android:text="192.168.43.157"
             android:inputType="text"
             android:backgroundTint="@android:color/holo_blue_dark"/>
 

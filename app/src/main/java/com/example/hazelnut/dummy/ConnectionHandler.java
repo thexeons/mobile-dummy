@@ -4,12 +4,12 @@ import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ConnectionHandler extends AsyncTask<String , Void ,String> {
+public class ConnectionHandler extends AsyncTask<String , Void ,Integer> {
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Integer doInBackground(String... strings) {
 
-        String result = "";
+        int result;
         int code = 200;
         try {
             URL siteURL = new URL(strings[0]);
@@ -20,22 +20,24 @@ public class ConnectionHandler extends AsyncTask<String , Void ,String> {
 
             code = connection.getResponseCode();
             if (code == 200) {
-                result = "-> AVAILABLE <-\t" + "Code: " + code;
-                ;
+                result = 1;
+
             } else {
-                result = "-> REDIRECTED <-\t" + "Code: " + code;
+                result = 2;
             }
         } catch (Exception e) {
-            result = "-> NOT AVAILABLE:  <-\t" + e.getMessage();
+            result = 0;
 
         }
-        System.out.println(strings[0] + "\t\tStatus:" + result);
         return result;
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(Integer s) {
+        if (s == 1)
+            super.onPostExecute(s);
+        else
+            System.out.println("------------------"+s);
     }
 }
 

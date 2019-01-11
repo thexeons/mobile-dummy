@@ -50,11 +50,11 @@ public class LoginActivity extends AppCompatActivity {
     TextView registerText, resultText;
     String ip = "localhost";
     String api = "/verifyLogin/";
-    String m1 = "192.168.43.219:8095";
-    String m2 = "192.168.43.171:8096";
-    String m3 = "192.168.43.100:8097";
-    String m4 = "192.168.43.101:8098";
-    String m5 = "192.168.43.102:8099";
+    //String m1 = "192.168.43.222:8095";
+    //String m2 = "192.168.43.171:8096";
+    //String m3 = "192.168.43.217:8097";
+    //String m4 = "192.168.43.222:8098";
+    //String m5 = "192.168.43.157:8099";
     String ipalt = "192.168.2.109:8095";
     int notificationId = 1;
 
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
         addNotif();
 
-        ip=m1;/*
+        /*ip=m1;/*
             if (new ConnectionHandler().execute(m1).equals("1"))
             {
                 ip = m1;
@@ -112,11 +112,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent pindah = new Intent(getApplicationContext(), DevActivity.class);
+                /*
                 pindah.putExtra("ip1", m1);
                 pindah.putExtra("ip1", m2);
                 pindah.putExtra("ip1", m3);
                 pindah.putExtra("ip1", m4);
                 pindah.putExtra("ip1", m5);
+                 */
                 pindah.putExtra("ip", ip);
                 startActivity(pindah);
                 finish();
