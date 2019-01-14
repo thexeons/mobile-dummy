@@ -286,13 +286,13 @@ public class UpdateActivity extends AppCompatActivity {
                             } else if (radioUnitButton.getText().equals("5")) {
                                 unit = "bcasekuritas";
                             }
-                            updatepost(nameFirst.getText().toString(),
-                                    nameLast.getText().toString(),
+                            updatepost(nameFirst.getText().toString().toUpperCase(),
+                                    nameLast.getText().toString().toUpperCase(),
                                     ktp.getText().toString(),
                                     email.getText().toString(),
                                     dob.getText().toString(),
                                     address.getText().toString(),
-                                    nationality.getText().toString(),
+                                    nationality.getText().toString().toUpperCase(),
                                     accountNumber.getText().toString(),
                                     photo.getText().toString(),
                                     ip,

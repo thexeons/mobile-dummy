@@ -4,18 +4,18 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/innerchainv"
+        android:icon="@drawable/innerchain"
         android:label="Innerchain"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter></activity>
-
+        <activity android:name=".LoginActivity"></activity>
         <activity android:name=".BlacklistActivity"></activity>
         <activity android:name=".ViewActivity"></activity>
         <activity android:name=".UpdateActivity"></activity>
