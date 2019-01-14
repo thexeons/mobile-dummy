@@ -11,23 +11,25 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="500px"
-        android:layout_height="500px"
+        android:layout_width="600px"
+        android:layout_height="600px"
         android:layout_margin="32px"
+        android:src="@drawable/innerchainv"
         android:layout_centerHorizontal="true"
         />
     <RelativeLayout
-        android:id="@+id/loginForm"
+        android:id="@+id/blacklist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/cardviewbg"
         android:padding="40px"
         android:layout_below="@+id/icon">
+        
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="YOU HAVE BEEN BLACKLISTED\nPLEASE CONTACT HALO BCA AT \n1500888"
+            android:text="YOUR ACCOUNT HAS BEEN BLACKLISTED. PLEASE CONTACT HALO BCA FOR FURTHER ASSISTANCE"
             android:textSize="10pt"/>
         <TextView
             android:id="@+id/errorLbl"
@@ -40,4 +42,12 @@
             android:visibility="invisible"
             android:layout_below="@+id/password"/>
     </RelativeLayout>
+    <Button
+        android:id="@+id/devBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/borderbg"
+        android:layout_alignParentBottom="true"
+        android:layout_width="600px"
+        android:layout_height="wrap_content"
+        android:text="LOG OUT" />
 </RelativeLayout>
