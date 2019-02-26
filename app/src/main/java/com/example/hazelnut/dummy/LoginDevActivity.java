@@ -83,8 +83,8 @@ public class LoginDevActivity extends AppCompatActivity {
         ipal.add(i.getStringExtra("m5"));
 
         ip = i.getStringExtra("ip");
-        loginButton.setEnabled(false);
-        signupButton.setEnabled(false);
+        //loginButton.setEnabled(false);
+        //signupButton.setEnabled(false);
 
         //resultText.setText(ipal.get(j));
 

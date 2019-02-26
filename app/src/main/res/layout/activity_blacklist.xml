@@ -43,7 +43,7 @@
             android:layout_below="@+id/password"/>
     </RelativeLayout>
     <Button
-        android:id="@+id/devBtn"
+        android:id="@+id/outBtn"
         android:layout_centerHorizontal="true"
         android:background="@drawable/borderbg"
         android:layout_alignParentBottom="true"

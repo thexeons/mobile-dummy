@@ -139,10 +139,10 @@ public class Register2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 errorLbl = "";
-                if (nameFirst.getText().toString().matches("[A-Za-z]+") == false || nameFirst.getText().toString().length() < 1 || nameFirst.getText().toString().length()>20){
+                if (nameFirst.getText().toString().matches("[A-Za-z ]+") == false || nameFirst.getText().toString().length() < 1 || nameFirst.getText().toString().length()>20){
                     errorLbl = "First name invalid";
                 }
-                else if (nameLast.getText().toString().matches("[A-Za-z]+") == false || nameLast.getText().toString().length() < 1 || nameLast.getText().toString().length()>20){
+                else if (nameLast.getText().toString().matches("[A-Za-z ]+") == false || nameLast.getText().toString().length() < 1 || nameLast.getText().toString().length()>20){
                     errorLbl = "Last name invalid";
                 }
                 else if (address.getText().toString().length() < 1 || address.getText().toString().matches("[A-Za-z0-9]+")){

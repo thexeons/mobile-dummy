@@ -79,7 +79,7 @@
         android:layout_width="180dp"
         android:layout_height="50dp"
         android:text="result"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     <ProgressBar
         android:id="@+id/pb"
         android:layout_width="match_parent"
